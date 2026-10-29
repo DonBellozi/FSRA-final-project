@@ -1,0 +1,46 @@
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: booking-service
+
+  datasource:
+    url: jdbc:h2:mem:bookingdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  admin:
+    username: "${FSRA_ADMIN_USERNAME:admin}"
+    password: "${FSRA_ADMIN_PASSWORD:StudyAdmin123!}"
+  jwt:
+    secret: "${FSRA_JWT_SECRET:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=}"
+  # Hotel calls use bounded connection and response waits.
+spring.cloud.openfeign.client.config.default.connectTimeout: 2000
+spring.cloud.openfeign.client.config.default.readTimeout: 3000
+
+logging.pattern.level: "%5p [traceId=%X{traceId:-}]"
